@@ -5,15 +5,10 @@ Datasets consists of data used for training, represented by a list of
 May be exported in different formats for application on other libraries.
 """
 from __future__ import unicode_literals
-
 import numpy as np
 import scipy.sparse as sp
 
-# from libact.utils import zip
-
-
 class Dataset(object):
-
     """libact dataset object
 
     Parameters
@@ -219,6 +214,9 @@ class Dataset(object):
         idx = np.random.choice(np.where(self.get_labeled_mask())[0],
                                size=sample_size, replace=replace )
         return Dataset(self._X[idx], self._y[idx])
+
+    def check_nan():
+        pass
 
 
 def import_libsvm_sparse(filename):

@@ -5,10 +5,9 @@ regression model.
 
 import numpy as np
 import sklearn.linear_model
-from ..base.interfaces import ProbabilisticModel
+from base.interfaces import ProbabilisticModel
 
 class LogisticRegression(ProbabilisticModel):
-
     """Logistic Regression Classifier
 
     References

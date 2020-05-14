@@ -6,10 +6,9 @@ smallest margin method (margin sampling).
 
 """
 import numpy as np
+from base.interfaces import QueryStrategy, ContinuousModel, ProbabilisticModel
 
-from libact.base.interfaces import QueryStrategy, ContinuousModel, \
-    ProbabilisticModel
-from libact.utils import inherit_docstring_from, zip
+# from utils import inherit_docstring_from, zip
 
 
 class UncertaintySampling(QueryStrategy):
@@ -80,6 +79,7 @@ class UncertaintySampling(QueryStrategy):
                 "model has to be a ContinuousModel or ProbabilisticModel"
             )
 
+        # TODO:(ATTENTION!) Why we need to train a model HERE ?
         self.model.train(self.dataset)
 
         self.method = kwargs.pop('method', 'lc')
@@ -95,8 +95,18 @@ class UncertaintySampling(QueryStrategy):
                 "method 'entropy' requires model to be a ProbabilisticModel"
             )
 
+        self.n_query_per_batch = kwargs.pop("n_query_per_batch", 10)
+        if self.n_query_per_batch <= 0 or \
+            not isinstance(self.n_query_per_batch, int):
+            raise ValueError(
+                "Invalid n_query_per_batch = {} parameter !".format(
+                    self.n_query_per_batch))
+
+
     def _get_scores(self):
         dataset = self.dataset
+        
+        # TODO:(ATTENTION!) Why we need to train a model HERE ?
         self.model.train(dataset)
         unlabeled_entry_ids, X_pool = dataset.get_unlabeled_entries()
 
@@ -116,7 +126,7 @@ class UncertaintySampling(QueryStrategy):
 
         elif self.method == 'entropy':
             score = np.sum(-dvalue * np.log(dvalue), axis=1)
-        return zip(unlabeled_entry_ids, score)
+        return unlabeled_entry_ids, score
 
 
     def make_query(self, return_score=False):
@@ -135,10 +145,11 @@ class UncertaintySampling(QueryStrategy):
 
         """
         dataset = self.dataset
-        # unlabeled_entry_ids, _ = dataset.get_unlabeled_entries()
 
-        unlabeled_entry_ids, scores = zip(*self._get_scores())
-        ask_id = np.argmax(scores)
+        unlabeled_entry_ids, scores = self._get_scores()
+
+        ask_id = np.argsort(scores)[::-1][:self.n_query_per_batch]
+        # ask_id = np.argmax(scores)
 
         if return_score:
             return unlabeled_entry_ids[ask_id], \

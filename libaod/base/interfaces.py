@@ -7,7 +7,6 @@ from abc import ABCMeta, abstractmethod
 
 
 class QueryStrategy(with_metaclass(ABCMeta, object)):
-
     """Pool-based query strategy
 
     A QueryStrategy advices on which unlabeled data to be queried next given
@@ -64,7 +63,6 @@ class QueryStrategy(with_metaclass(ABCMeta, object)):
 
 
 class Labeler(with_metaclass(ABCMeta, object)):
-
     """Label the queries made by QueryStrategies
 
     Assign labels to the samples queried by QueryStrategies.
@@ -87,7 +85,6 @@ class Labeler(with_metaclass(ABCMeta, object)):
 
 
 class Model(with_metaclass(ABCMeta, object)):
-
     """Classification Model
 
     A Model returns a class-predicting function for future samples after
@@ -153,7 +150,6 @@ class MultilabelModel(Model):
 
 
 class ContinuousModel(Model):
-
     """Classification Model with intermediate continuous output
 
     A continuous classification model is able to output a real-valued vector
@@ -186,7 +182,6 @@ class ContinuousModel(Model):
 
 
 class ProbabilisticModel(ContinuousModel):
-
     """Classification Model with probability output
 
     A probabilistic classification model is able to output a real-valued vector
