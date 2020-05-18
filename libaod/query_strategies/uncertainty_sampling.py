@@ -6,13 +6,14 @@ smallest margin method (margin sampling).
 
 """
 import numpy as np
-from base.interfaces import QueryStrategy, ContinuousModel, ProbabilisticModel
-
+# import random_sampling
+# from . import random_sampling
+# from base.interfaces import QueryStrategy, ContinuousModel, ProbabilisticModel
+from ..base.interfaces import QueryStrategy, ContinuousModel, ProbabilisticModel
 # from utils import inherit_docstring_from, zip
 
 
 class UncertaintySampling(QueryStrategy):
-
     """Uncertainty Sampling
 
     This class implements Uncertainty Sampling active learning algorithm [1]_.
@@ -64,7 +65,6 @@ class UncertaintySampling(QueryStrategy):
     .. [1] Settles, Burr. "Active learning literature survey." University of
            Wisconsin, Madison 52.55-66 (2010): 11.
     """
-
     def __init__(self, *args, **kwargs):
         super(UncertaintySampling, self).__init__(*args, **kwargs)
 

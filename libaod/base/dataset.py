@@ -215,17 +215,17 @@ class Dataset(object):
                                size=sample_size, replace=replace )
         return Dataset(self._X[idx], self._y[idx])
 
+    # TODO: Method for cheacking NaN in the Dataset
     def check_nan():
         pass
 
 
-def import_libsvm_sparse(filename):
-    """Imports dataset file in libsvm sparse format"""
-    from sklearn.datasets import load_svmlight_file
-    X, y = load_svmlight_file(filename)
-    return Dataset(X.toarray(), y)
-
-
+# def import_libsvm_sparse(filename):
+#     """Imports dataset file in libsvm sparse format"""
+#     from sklearn.datasets import load_svmlight_file
+#     X, y = load_svmlight_file(filename)
+#     return Dataset(X.toarray(), y)
+# 
 # def import_scipy_mat(filename):
 #     from scipy.io import loadmat
 #     data = loadmat(filename)

@@ -6,6 +6,7 @@ Created on Thu May 14 10:04:02 2020
 @author: zhuoyin94
 """
 # import sys
+# sys.apth.append("..")
 # sys.path.append('/home/zhuoyin94/Desktop/turnout_current_analysis/codes/libaod/libaod')
 
 import copy
