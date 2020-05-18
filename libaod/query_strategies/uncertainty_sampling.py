@@ -6,10 +6,7 @@ smallest margin method (margin sampling).
 
 """
 import numpy as np
-# import random_sampling
-# from . import random_sampling
-# from base.interfaces import QueryStrategy, ContinuousModel, ProbabilisticModel
-from ..base.interfaces import QueryStrategy, ContinuousModel, ProbabilisticModel
+from base.interfaces import QueryStrategy, ContinuousModel, ProbabilisticModel
 # from utils import inherit_docstring_from, zip
 
 

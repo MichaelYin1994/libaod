@@ -6,7 +6,7 @@ Created on Thu May 14 10:04:02 2020
 @author: zhuoyin94
 """
 # import sys
-# sys.apth.append("..")
+# sys.path.append("..")
 # sys.path.append('/home/zhuoyin94/Desktop/turnout_current_analysis/codes/libaod/libaod')
 
 import copy
@@ -55,14 +55,14 @@ def split_train_valid(data=None, labels=None, n_labeled=100):
 
 
 if __name__ == "__main__":
-    data, labels = read_raw_csv(dataset="mnist", nrows=1000)
+    data, labels = read_raw_csv(dataset="mnist", nrows=2000)
 
     # INITIALIZING some parameters
     plot_samples = False
     n_classes = len(np.unique(labels))
     num_batches_run = 1000
     num_need_label_per_batch = 9
-    initial_lableded = 200
+    initial_lableded = 1000
     error_rate = []
 
     # Plot randomly 50 digits
