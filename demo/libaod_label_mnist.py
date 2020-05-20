@@ -19,7 +19,7 @@ from sklearn.model_selection import train_test_split
 # from libaod.base.dataset import Dataset
 from libaod.base.data import Dataset
 from libaod.query_strategies.uncertainty_sampling import UncertaintySampling
-from libaod.models import LogisticRegression
+from libaod.models import RandomForest
 from libaod.labelers.interactive_labeler import InteractiveLabeler
 
 
@@ -36,7 +36,6 @@ def read_raw_csv(nrows=100, dataset="mnist"):
     pix_col_names = [name for name in data.columns if "pix" in name]
     labels = data["label"].values
     data = data[pix_col_names].values
-
     return data, labels
 
 
@@ -51,7 +50,7 @@ def split_train_valid(data=None, labels=None, n_labeled=100):
 
     train_data = Dataset(X_train, X_train, np.concatenate(
         [y_train[:n_labeled], [None] * (len(y_train)-n_labeled)]))
-    valid_data = Dataset(X_valid, y_valid)
+    valid_data = Dataset(X_valid, X_valid, y_valid)
     return train_data, valid_data
 
 
@@ -86,41 +85,41 @@ if __name__ == "__main__":
                                                n_labeled=initial_lableded)
     train_data_compare = copy.deepcopy(train_data)
 
-    # # Preparing strategy
-    # qs = UncertaintySampling(train_data, method='lc', n_query_per_batch=num_need_label_per_batch,
-    #                           model=LogisticRegression())
-
     # # Initial error rate
-    # model = LogisticRegression(penalty="l2", solver="lbfgs", max_iter=400, C=1)
-    # model.train(train_data)
-    # error_rate = np.append(error_rate, 1-model.score(valid_data))
+    model = RandomForest(n_estimators=200, max_features="sqrt", n_jobs=-1)
+    model.train(train_data)
+    error_rate = np.append(error_rate, 1-model.score(valid_data))
+    
+    # Preparing strategy
+    qs = UncertaintySampling(train_data, method='sm', n_query_per_batch=num_need_label_per_batch,
+                             model=RandomForest(n_estimators=200, max_features="sqrt", n_jobs=-1))
 
-    # # Give each label its name (labels are from 0 to n_classes-1)
-    # lbr = InteractiveLabeler(label_name=[str(lbl) for lbl in range(n_classes)],
-    #                          n_query_per_batch=num_need_label_per_batch)
+    # Give each label its name (labels are from 0 to n_classes-1)
+    lbr = InteractiveLabeler(label_name=[str(lbl) for lbl in range(n_classes)],
+                              n_query_per_batch=num_need_label_per_batch)
 
-    # # Query labeling
-    # for i in range(num_batches_run):
-    #     '''
-    #     Strategy 1: Uncertainty Sampling
-    #     '''
-    #     ask_id = qs.make_query()
+    # Query labeling
+    for i in range(num_batches_run):
+        '''
+        Strategy 1: Uncertainty Sampling
+        '''
+        ask_id = qs.make_query()
 
-    #     print("asking sample from Uncertainty Sampling")
-    #     # Plot the Samples need to be labeled
-    #     fig, ax_objs = plt.subplots(
-    #         3, 3, sharex=True, sharey=True, figsize=(8, 8))
-    #     ax_objs = ax_objs.ravel()
-    #     for ax_ind, sa_ind in enumerate(ask_id):
-    #         data_tmp = train_data[sa_ind][0].reshape((28, 28))
-    #         ax_objs[ax_ind].imshow(data_tmp)
-    #         ax_objs[ax_ind].get_xaxis().set_visible(False)
-    #         ax_objs[ax_ind].get_yaxis().set_visible(False)
-    #     fig.tight_layout(pad=0.1)
-    #     plt.show()
-    #     pause(1)
+        print("asking sample from Uncertainty Sampling")
+        # Plot the Samples need to be labeled
+        fig, ax_objs = plt.subplots(
+            3, 3, sharex=True, sharey=True, figsize=(8, 8))
+        ax_objs = ax_objs.ravel()
+        for ax_ind, sa_ind in enumerate(ask_id):
+            data_tmp = train_data[sa_ind][0].reshape((28, 28))
+            ax_objs[ax_ind].imshow(data_tmp)
+            ax_objs[ax_ind].get_xaxis().set_visible(False)
+            ax_objs[ax_ind].get_yaxis().set_visible(False)
+        fig.tight_layout(pad=0.1)
+        plt.show()
+        pause(1)
 
-    #     lb = lbr.label()
-    #     train_data.update(ask_id, lb)
-    #     model.train(train_data)
-    #     error_rate = np.append(error_rate, 1-model.score(valid_data))
+        lb = lbr.label()
+        train_data.update(ask_id, lb)
+        model.train(train_data)
+        error_rate = np.append(error_rate, 1-model.score(valid_data))

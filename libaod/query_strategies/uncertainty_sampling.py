@@ -76,8 +76,8 @@ class UncertaintySampling(QueryStrategy):
                 "model has to be a ContinuousModel or ProbabilisticModel"
             )
 
-        # TODO:(ATTENTION!) Why we need to train a model HERE ?
-        self.model.train(self.dataset)
+        # # TODO:(ATTENTION!) Why we need to train a model HERE ?
+        # self.model.train(self.dataset)
 
         self.method = kwargs.pop('method', 'lc')
         if self.method not in ['lc', 'sm', 'entropy']:
@@ -97,15 +97,16 @@ class UncertaintySampling(QueryStrategy):
             not isinstance(self.n_query_per_batch, int):
             raise ValueError(
                 "Invalid n_query_per_batch = {} parameter !".format(
-                    self.n_query_per_batch))
+                    self.n_query_per_batch)
+            )
 
 
     def _get_scores(self):
         dataset = self.dataset
-        
+
         # TODO:(ATTENTION!) Why we need to train a model HERE ?
         self.model.train(dataset)
-        unlabeled_entry_ids, X_pool = dataset.get_unlabeled_entries()
+        unlabeled_entry_ids, X_pool = dataset.get_unlabeled_feat_ids()
 
         if isinstance(self.model, ProbabilisticModel):
             dvalue = self.model.predict_proba(X_pool)

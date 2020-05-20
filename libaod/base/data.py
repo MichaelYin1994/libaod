@@ -159,6 +159,10 @@ class Dataset(object):
             ret_labels = self._y[unlabeled_mask]
         return ret_data, ret_labels
 
+    def get_unlabeled_feat_ids(self):
+        return np.where(~self.get_labeled_mask())[0], self._feat[~self.get_labeled_mask()]
+
+
     # def labeled_uniform_sample(self, sample_size, replace=True):
     #     """Returns a Dataset object with labeled data only, which is
     #     resampled uniformly with given sample size.
