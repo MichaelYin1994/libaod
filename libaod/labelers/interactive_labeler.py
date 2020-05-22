@@ -5,7 +5,7 @@ This module includes an InteractiveLabeler.
 from six.moves import input
 
 from libact.base.interfaces import Labeler
-from libact.utils import inherit_docstring_from
+# from libact.utils import inherit_docstring_from
 
 
 class InteractiveLabeler(Labeler):
@@ -31,7 +31,7 @@ class InteractiveLabeler(Labeler):
         pass
 
 
-    @inherit_docstring_from(Labeler)
+    # @inherit_docstring_from(Labeler)
     def label(self):
         banner = "Enter the list associated label with the samples, separated with space: "
         if self.label_name is not None:
@@ -54,7 +54,8 @@ class InteractiveLabeler(Labeler):
             is_align = len(lbl) == self.n_query_per_batch   # True means valid
             if not(is_label_name_valid and is_each_labeled_res_valid and is_align):
                 print('Invalid label, please re-enter the associated label.')
-                lbl = input(banner)                
+                lbl = input(banner)      
+                lbl = lbl.split(" ")
             else:
                 break
 

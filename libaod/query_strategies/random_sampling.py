@@ -3,7 +3,6 @@
 from libaod.base.interfaces import QueryStrategy
 from libaod.utils import inherit_docstring_from, seed_random_state, zip
 
-
 class RandomSampling(QueryStrategy):
 
     r"""Random sampling

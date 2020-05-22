@@ -6,9 +6,9 @@ Created on Wed May 20 17:50:38 2020
 @author: zhuoyin94
 """
 
-# import sys
-# sys.path.append("..")
-# sys.path.append('/home/zhuoyin94/Desktop/turnout_current_analysis/codes/libaod/libaod')
+import sys
+sys.path.append("..")
+sys.path.append('/home/zhuoyin94/Desktop/turnout_current_analysis/codes/libaod/libaod')
 
 import copy
 import pandas as pd
@@ -63,7 +63,7 @@ def split_train_valid(data=None, feat=None, labels=None, n_labeled=1000):
     train_data = Dataset(feat=train_feat, data=train_data, y=np.concatenate(
         [train_label[:n_labeled], [None] * (len(train_label)-n_labeled)]))
     valid_data = Dataset(data=vaild_data, feat=valid_feat, y=valid_label)
-    return train_data, valid_data, 
+    return train_data, valid_data
 
 
 if __name__ == "__main__":
@@ -77,9 +77,9 @@ if __name__ == "__main__":
     test_scores = []
 
     train_data, valid_data = split_train_valid(data=data,
-                                                labels=feat["target"],
-                                                n_labeled=initial_lableded,
-                                                feat=feat.drop("target", axis=1))
+                                               labels=feat["target"],
+                                               n_labeled=initial_lableded,
+                                               feat=feat.drop("target", axis=1))
 
     # Initial error rate
     model = RandomForest(n_estimators=200, max_features="sqrt", n_jobs=-1)
