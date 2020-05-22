@@ -63,7 +63,7 @@ if __name__ == "__main__":
     num_batches_run = 500
     num_need_label_per_batch = 9
     initial_lableded = 1000
-    error_rate = []
+    test_scores = []
 
     # Plot randomly 50 digits
     if plot_samples:
@@ -88,8 +88,8 @@ if __name__ == "__main__":
     # # Initial error rate
     model = RandomForest(n_estimators=200, max_features="sqrt", n_jobs=-1)
     model.train(train_data)
-    error_rate = np.append(error_rate, 1-model.score(valid_data))
-    
+    test_scores = np.append(test_scores, model.score(valid_data, metric="f1"))
+
     # Preparing strategy
     qs = UncertaintySampling(train_data, method='sm', n_query_per_batch=num_need_label_per_batch,
                              model=RandomForest(n_estimators=200, max_features="sqrt", n_jobs=-1))
@@ -122,4 +122,4 @@ if __name__ == "__main__":
         lb = lbr.label()
         train_data.update(ask_id, lb)
         model.train(train_data)
-        error_rate = np.append(error_rate, 1-model.score(valid_data))
+        test_scores = np.append(test_scores, model.score(valid_data, metric="f1"))

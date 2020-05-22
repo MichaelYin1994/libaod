@@ -39,6 +39,9 @@ class InteractiveLabeler(Labeler):
 
         lbl = input(banner)
         lbl = lbl.split(" ")
+        if lbl[0] == "q":
+            return None
+
         while True:
             is_label_name_valid = (
                 self.label_name is not None)                # True means valid

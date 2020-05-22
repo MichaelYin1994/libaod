@@ -57,7 +57,7 @@ class Dataset(object):
         return self._feat.shape[0]
 
     def __getitem__(self, idx):
-        return self._feat[idx], self._feat[idx]
+        return self._data[idx], self._feat[idx], self._y[idx]
 
     @property
     def data(self): return self
