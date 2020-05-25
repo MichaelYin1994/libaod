@@ -51,7 +51,7 @@ def active_generating_queries(feat_table=None, **kwargs):
     Author: Michael Yin
     E-Mail: zhuoyin94@163.com
     ----------
-    
+
     @Description:
     ----------
         Active label generating according to the classifier predition 
@@ -61,7 +61,8 @@ def active_generating_queries(feat_table=None, **kwargs):
     ----------
     feat_table: {pandas DataFrame-like}
         The DataFrame that is used train the Machine Learning Algorithm.
-        The shape is like:
+        The shape is like(0 stands for normal samples, 1 stands for
+        anomaly samples.):
            phase_a_mean  phase_b_mean  ... target
         0      1.281014      1.347609           0
         1      1.540133      1.472467           1
@@ -124,7 +125,7 @@ def active_generating_queries(feat_table=None, **kwargs):
             -test_pred_proba * np.log(test_pred_proba), axis=1)
 
     query_id = np.argsort(test_pred_proba)[::-1][:n_query_per_batch]
-    ret_query_res = feat_unlabeled[["record_id", "device_id"]].iloc[query_id]
+    ret_query_res = feat_unlabeled[["device_id", "record_id"]].iloc[query_id]
     return ret_query_res.values.tolist()
 
 
@@ -134,4 +135,5 @@ if __name__ == "__main__":
     feat_with_nan = feat.copy()
     feat_with_nan["target"].iloc[15000:] = None
 
-    tmp = active_generating_queries(feat_with_nan, method="entropy")
+    tmp = active_generating_queries(feat_with_nan, method="entropy",
+                                    n_query_per_batch=10)
