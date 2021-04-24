@@ -5,7 +5,6 @@ The package works according to the interfaces defined below.
 from six import with_metaclass
 from abc import ABCMeta, abstractmethod
 
-
 class QueryStrategy(with_metaclass(ABCMeta, object)):
     """Pool-based query strategy
 
@@ -81,6 +80,17 @@ class Labeler(with_metaclass(ABCMeta, object)):
         label : int
             The class label of the queried feature.
         """
+        pass
+
+
+class Dataset:
+    """"""
+    @abstractmethod
+    def __len__(self):
+        pass
+
+    @abstractmethod
+    def __getitem__(self, idx):
         pass
 
 

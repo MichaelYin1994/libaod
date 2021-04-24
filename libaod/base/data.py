@@ -1,18 +1,24 @@
-#!/usr/bin/env python3
+#!/usr/local/bin python
 # -*- coding: utf-8 -*-
-"""
-Created on Wed May 20 10:35:02 2020
 
-@author: zhuoyin94
+# Created on 202005201035
+# Author:     zhuoyin94 <zhuoyin94@163.com>
+# Github:     https://github.com/MichaelYin1994
+# Reference:  https://github.com/ntucllab/libact
+
+"""
+此模块（data.py）包含了libaod的基础接口类，包括：
+-- 基础数据类
+-- 图像数据类
 """
 
 from __future__ import unicode_literals
 import numpy as np
 
-class Dataset(object):
-    """libaod dataset object
+class Dataset:
+    """libaod的基础数据类。
 
-    Parameters
+    @Parameters:
     ----------
     data : {array-like or list-like}, shape = (n_samples, )
         Raw data of sample set, the value can be empty.
@@ -25,7 +31,7 @@ class Dataset(object):
         The ground truth (label) for corresponding sample. Unlabeled data
         should be given a label None.
 
-    Attributes
+    @Attributes:
     ----------
     data : list, shape = (n_samples)
         List of all sample feature and label tuple.
@@ -162,16 +168,3 @@ class Dataset(object):
     def get_unlabeled_feat_ids(self):
         return np.where(~self.get_labeled_mask())[0], self._feat[~self.get_labeled_mask()]
 
-
-    # def labeled_uniform_sample(self, sample_size, replace=True):
-    #     """Returns a Dataset object with labeled data only, which is
-    #     resampled uniformly with given sample size.
-    #     Parameter `replace` decides whether sampling with replacement or not.
-
-    #     Parameters
-    #     ----------
-    #     sample_size
-    #     """
-    #     idx = np.random.choice(np.where(self.get_labeled_mask())[0],
-    #                            size=sample_size, replace=replace)
-    #     return Dataset(self._feat[idx], self._y[idx])
